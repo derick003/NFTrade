@@ -21,6 +21,7 @@ type OrderInfo = {
 }
 
 type TxInfo = {
+    to: string;
     data: string;
     value: BigNumber;
 }
@@ -63,6 +64,7 @@ async function generateData(client: OpenSeaSDK, fulfillerAddress: string, orderI
     const recipient = fulfillerAddress;
     const orderInfosLength = orderInfos.length;
     const maximumFulfilled = 32 * orderInfosLength;
+    let to = "";
     let value = ethers.BigNumber.from("0");
     for (let i = 0; i < orderInfosLength; i++) {
         const data = await client.api.generateFulfillmentData(
@@ -72,6 +74,7 @@ async function generateData(client: OpenSeaSDK, fulfillerAddress: string, orderI
             orderInfos[i].side
         );
         const transaction = data.fulfillment_data.transaction;
+        to = transaction.to;
         value = value.add(ethers.BigNumber.from(transaction.value));
         const inputdata = JSON.parse(JSON.stringify(transaction.input_data));
 
@@ -146,6 +149,7 @@ async function generateData(client: OpenSeaSDK, fulfillerAddress: string, orderI
         maximumFulfilled
     ]);
     return {
+        to: to,
         data: fulfillData,
         value: value
     };
