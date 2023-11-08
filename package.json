@@ -18,6 +18,8 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@looksrare/sdk-v2": "^1.1.0",
+    "ethers": "5.7.2",
     "opensea-js": "^6.1.12"
   }
 }
